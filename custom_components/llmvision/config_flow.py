@@ -159,7 +159,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Optional(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_LOCALAI_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -265,7 +265,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OLLAMA_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -394,7 +394,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OPENWEBUI_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -505,7 +505,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OPENAI_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -613,7 +613,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_AZURE_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -728,7 +728,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_ANTHROPIC_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -828,7 +828,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_GOOGLE_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -928,7 +928,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_GROQ_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -1030,7 +1030,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_CUSTOM_OPENAI_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -1143,7 +1143,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_AWS_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,
@@ -1429,7 +1429,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OPENROUTER_MODEL
                             ): str,
-                            vol.Optional(CONF_TEMPERATURE, default=0.5): selector(
+                            vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
                                         "min": 0,

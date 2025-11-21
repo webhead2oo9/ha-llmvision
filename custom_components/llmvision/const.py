@@ -14,6 +14,7 @@ CONF_TEMPERATURE = "temperature"
 CONF_TOP_P = "top_p"
 CONF_CONTEXT_WINDOW = "context_window"  # (ollama: num_ctx)
 CONF_KEEP_ALIVE = "keep_alive"
+CONF_REASONING = "reasoning"
 
 # Azure specific
 CONF_AZURE_BASE_URL = "azure_base_url"
@@ -98,7 +99,9 @@ DEFAULT_OPENROUTER_MODEL = "openai/gpt-4o-mini"
 DEFAULT_SUMMARY_PROMPT = "Provide a brief summary for the following titles. Focus on the key actions or changes that occurred over time and avoid unnecessary details or subjective interpretations. The summary should be concise, objective, and relevant to the content of the images. Keep the summary under 50 words and ensure it captures the main events or activities described in the descriptions. Here are the descriptions:\n "
 
 # API Endpoints
-ENDPOINT_OPENAI = "https://api.openai.com/v1/chat/completions"
+# Responses API is the default for OpenAI; it also works for recent chat models while
+# unlocking reasoning/structured-output features.
+ENDPOINT_OPENAI = "https://api.openai.com/v1/responses"
 ENDPOINT_ANTHROPIC = "https://api.anthropic.com/v1/messages"
 ENDPOINT_GOOGLE = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
 ENDPOINT_GROQ = "https://api.groq.com/openai/v1/chat/completions"

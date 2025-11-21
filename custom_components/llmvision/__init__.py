@@ -234,7 +234,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_OPENAI_MODEL
                 updated = True
             if "openai_temperature" not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if "openai_top_p" in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -247,7 +247,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_ANTHROPIC_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -270,7 +270,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_AZURE_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -284,7 +284,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_GROQ_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -298,7 +298,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_GOOGLE_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -321,7 +321,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_LOCALAI_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -344,7 +344,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_OLLAMA_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -363,7 +363,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_CUSTOM_OPENAI_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -385,7 +385,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_AWS_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -408,7 +408,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry) -> bool:
                 new_data[CONF_DEFAULT_MODEL] = DEFAULT_OPENWEBUI_MODEL
                 updated = True
             if CONF_TEMPERATURE not in new_data:
-                new_data[CONF_TEMPERATURE] = 0.5
+                new_data[CONF_TEMPERATURE] = 1.0
                 updated = True
             if CONF_TOP_P not in new_data:
                 new_data[CONF_TOP_P] = 0.9
@@ -560,6 +560,7 @@ class ServiceCallData:
         self.target_width = data_call.data.get(TARGET_WIDTH, 3840)
         self.temperature = float()
         self.max_tokens = int(data_call.data.get(MAXTOKENS, 3000))
+        self.reasoning = data_call.data.get("reasoning", "none")
         self.include_filename = data_call.data.get(INCLUDE_FILENAME, False)
         self.expose_images = data_call.data.get(EXPOSE_IMAGES, False)
         self.generate_title = data_call.data.get(GENERATE_TITLE, False)

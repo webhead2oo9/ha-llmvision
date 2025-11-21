@@ -84,6 +84,30 @@ image_analyzer:
       default: 3000
       selector:
         number:
+    reasoning:
+      name: Reasoning Effort
+      description: 'Reasoning effort for Responses models: none, low, medium, or high.'
+      required: false
+      default: none
+      selector:
+        select:
+          options:
+            - none
+            - low
+            - medium
+            - high
+    reasoning:
+      name: Reasoning Effort
+      description: 'Reasoning effort for Responses models: none, low, medium, or high.'
+      required: false
+      default: none
+      selector:
+        select:
+          options:
+            - none
+            - low
+            - medium
+            - high
     generate_title:
       name: Generate Title
       required: false

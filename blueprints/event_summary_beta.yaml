@@ -125,6 +125,17 @@ blueprint:
           default: 5000
           selector:
             number:
+        reasoning:
+          name: Reasoning Effort (Responses)
+          description: Choose the Responses reasoning level for AI calls.
+          default: none
+          selector:
+            select:
+              options:
+                - none
+                - low
+                - medium
+                - high
     # Notificaion Section
     notification_section:
       name: Notification Settings
@@ -515,6 +526,7 @@ action:
               include_filename: true
               target_width: 1280
               max_tokens: 3
+              reasoning: !input reasoning
             response_variable: importance
 
   # Cancel automation if event not deemed important
@@ -634,6 +646,7 @@ action:
       max_frames: !input max_frames
       target_width: !input target_width
       max_tokens: !input max_tokens
+      reasoning: !input reasoning
     response_variable: response
 
   - alias: "Update label with title"
