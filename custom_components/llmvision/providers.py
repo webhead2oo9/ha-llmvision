@@ -154,7 +154,8 @@ class Request:
         provider_name = Request.get_provider(self.hass, entry_id)
         # Ensure model defaults are respected
         call.model = getattr(call, "model", None) or self.get_default_model(entry_id)
-        call.temperature = config.get(CONF_TEMPERATURE, 0.5)
+        call.temperature = config.get(CONF_TEMPERATURE, 1.0)
+        call.reasoning = getattr(call, "reasoning", None) or "none"
         call.top_p = config.get(CONF_TOP_P, 0.9)
         call.base64_images = self.base64_images
         call.filenames = self.filenames
@@ -294,7 +295,7 @@ class Provider(ABC):
         domain_data = self.hass.data.get(DOMAIN) or {}
         config = domain_data.get(entry_id) or {}
         default_parameters = {
-            "temperature": config.get(CONF_TEMPERATURE, 0.5),
+            "temperature": config.get(CONF_TEMPERATURE, 1.0),
             "top_p": config.get(CONF_TOP_P, 0.9),
             "keep_alive": config.get(CONF_KEEP_ALIVE, 5),
             "context_window": config.get(CONF_CONTEXT_WINDOW, 2048),
@@ -412,76 +413,91 @@ class OpenAI(Provider):
         else:
             url = self.endpoint
         response = await self._post(url=url, headers=headers, data=data)
-        response_text = response.get("choices")[0].get("message").get("content")
-        return response_text
+        # Prefer aggregated helper if present
+        if response.get("output_text"):
+            return response.get("output_text")
+
+        # Fallback: walk output items
+        output_items = response.get("output", [])
+        for item in output_items:
+            if item.get("type") == "message":
+                content_parts = item.get("content", [])
+                for part in content_parts:
+                    if part.get("type") in ("output_text", "text"):
+                        return part.get("text")
+
+        raise ServiceValidationError("No text returned from OpenAI Responses API")
 
     def _prepare_vision_data(self, call: dict) -> dict:
         default_parameters = self._get_default_parameters(call)
-        payload = {
-            "model": self.model,
-            "messages": [{"role": "user", "content": []}],
-            "max_completion_tokens": call.max_tokens,
-            "temperature": default_parameters.get("temperature"),
-            "top_p": default_parameters.get("top_p"),
-        }
+        system_prompt = self._get_system_prompt()
 
-        # Remove temperature and top_p if model is gpt-5
-        if self.model in ["gpt-5", "gpt-5-mini", "gpt-5-nano"]:
-            payload = {
-                k: v for k, v in payload.items() if k not in ("temperature", "top_p")
-            }
-
+        # Build main user message with text + all images
+        user_content = []
         for image, filename in zip(call.base64_images, call.filenames):
             tag = (
                 ("Image " + str(call.base64_images.index(image) + 1))
                 if filename == ""
                 else filename
             )
-            payload["messages"][0]["content"].append(
-                {"type": "text", "text": tag + ":"}
-            )
-            payload["messages"][0]["content"].append(
+            user_content.append({"type": "input_text", "text": tag + ":"})
+            user_content.append(
                 {
-                    "type": "image_url",
-                    "image_url": {"url": f"data:image/jpeg;base64,{image}"},
+                    "type": "input_image",
+                    "image_url": f"data:image/jpeg;base64,{image}",
                 }
             )
 
-        # User message
-        payload["messages"][0]["content"].append({"type": "text", "text": call.message})
-        # System prompt
-        system_prompt = self._get_system_prompt()
-        payload["messages"].insert(0, {"role": "system", "content": system_prompt})
+        # User prompt
+        user_content.append({"type": "input_text", "text": call.message})
 
-        # Memory if use_memory is set
+        input_items = [{"role": "user", "content": user_content}]
+
+        # Memory support (prepend so it’s closer to instructions)
         if getattr(call, "use_memory", False):
-            memory_content = call.memory._get_memory_images(memory_type="OpenAI")
+            memory_content = call.memory._get_memory_images(
+                memory_type="OpenAI-Responses"
+            )
             if memory_content:
-                payload["messages"].insert(
-                    1, {"role": "user", "content": memory_content}
-                )
+                input_items.insert(0, {"role": "user", "content": memory_content})
+
+        payload = {
+            "model": self.model,
+            "instructions": system_prompt,
+            "input": input_items,
+            "max_output_tokens": call.max_tokens,
+            # Use low/no reasoning for default; keeps temperature/top_p valid on most models.
+            "reasoning": {"effort": call.reasoning},
+            "temperature": default_parameters.get("temperature"),
+            "top_p": default_parameters.get("top_p"),
+        }
 
         return payload
 
     def _prepare_text_data(self, call: dict) -> dict:
         default_parameters = self._get_default_parameters(call)
         title_prompt = self._get_title_prompt()
+
+        input_items = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "input_text", "text": title_prompt},
+                    {"type": "input_text", "text": call.message},
+                ],
+            }
+        ]
+
         payload = {
             "model": self.model,
-            "messages": [
-                {"role": "user", "content": [{"type": "text", "text": title_prompt}]},
-                {"role": "user", "content": [{"type": "text", "text": call.message}]},
-            ],
-            "max_completion_tokens": call.max_tokens,
+            "instructions": title_prompt,
+            "input": input_items,
+            "max_output_tokens": call.max_tokens,
+            "reasoning": {"effort": call.reasoning},
             "temperature": default_parameters.get("temperature"),
             "top_p": default_parameters.get("top_p"),
         }
 
-        # Remove temperature and top_p if model is gpt-5
-        if self.model in ["gpt-5", "gpt-5-mini", "gpt-5-nano"]:
-            payload = {
-                k: v for k, v in payload.items() if k not in ("temperature", "top_p")
-            }
         return payload
 
     async def validate(self) -> None | ServiceValidationError:
@@ -489,13 +505,17 @@ class OpenAI(Provider):
             headers = self._generate_headers()
             data = {
                 "model": self.model,
-                "messages": [
-                    {"role": "user", "content": [{"type": "text", "text": "Hi"}]}
+                "instructions": "Health check",
+                "input": [
+                    {
+                        "role": "user",
+                        "content": [{"type": "input_text", "text": "Hi"}],
+                    }
                 ],
+                "max_output_tokens": 5,
+                "reasoning": {"effort": "none"},
             }
-            await self._post(
-                url=self.endpoint.get("base_url"), headers=headers, data=data
-            )
+            await self._post(url=self.endpoint.get("base_url"), headers=headers, data=data)
         else:
             raise ServiceValidationError("empty_api_key")
 

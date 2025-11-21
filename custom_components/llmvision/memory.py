@@ -49,11 +49,33 @@ class Memory:
         content = []
         memory_prompt = "The following images along with descriptions serve as reference. They are not to be mentioned in the response."
 
-        if memory_type == "OpenAI":
+        def _get_tag(idx: int) -> str:
+            # Gracefully fall back to a numbered tag if a label is missing.
+            return (
+                self.memory_strings[idx]
+                if idx < len(self.memory_strings)
+                else f"Image {idx + 1}"
+            )
+
+        if memory_type == "OpenAI-Responses":
+            if self.memory_images:
+                content.append({"type": "input_text", "text": memory_prompt})
+            for idx, image in enumerate(self.memory_images):
+                tag = _get_tag(idx)
+
+                content.append({"type": "input_text", "text": tag + ":"})
+                content.append(
+                    {
+                        "type": "input_image",
+                        "image_url": f"data:image/jpeg;base64,{image}",
+                    }
+                )
+
+        elif memory_type == "OpenAI":
             if self.memory_images:
                 content.append({"type": "text", "text": memory_prompt})
-            for image in self.memory_images:
-                tag = self.memory_strings[self.memory_images.index(image)]
+            for idx, image in enumerate(self.memory_images):
+                tag = _get_tag(idx)
 
                 content.append({"type": "text", "text": tag + ":"})
                 content.append(
@@ -66,8 +88,8 @@ class Memory:
         elif memory_type == "OpenAI-legacy":
             if self.memory_images:
                 content.append({"type": "text", "text": memory_prompt})
-            for image in self.memory_images:
-                tag = self.memory_strings[self.memory_images.index(image)]
+            for idx, image in enumerate(self.memory_images):
+                tag = _get_tag(idx)
 
                 content.append({"type": "text", "text": tag + ":"})
                 content.append(
