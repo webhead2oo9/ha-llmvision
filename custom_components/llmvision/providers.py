@@ -52,6 +52,7 @@ from .const import (
     CONF_CONTEXT_WINDOW,
     CONF_TEMPERATURE,
     CONF_TOP_P,
+    CONF_REASONING,
     CONF_SYSTEM_PROMPT,
     CONF_TITLE_PROMPT,
     DEFAULT_SYSTEM_PROMPT,
@@ -155,7 +156,8 @@ class Request:
         # Ensure model defaults are respected
         call.model = getattr(call, "model", None) or self.get_default_model(entry_id)
         call.temperature = config.get(CONF_TEMPERATURE, 1.0)
-        call.reasoning = getattr(call, "reasoning", None) or "none"
+        default_reasoning = config.get(CONF_REASONING, "low")
+        call.reasoning = getattr(call, "reasoning", None) or default_reasoning
         call.top_p = config.get(CONF_TOP_P, 0.9)
         call.base64_images = self.base64_images
         call.filenames = self.filenames
@@ -299,6 +301,7 @@ class Provider(ABC):
             "top_p": config.get(CONF_TOP_P, 0.9),
             "keep_alive": config.get(CONF_KEEP_ALIVE, 5),
             "context_window": config.get(CONF_CONTEXT_WINDOW, 2048),
+            "reasoning": config.get(CONF_REASONING, "low"),
         }
         return default_parameters
 

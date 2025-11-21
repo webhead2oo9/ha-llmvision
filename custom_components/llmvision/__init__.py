@@ -23,6 +23,7 @@ from .const import (
     CONF_DEFAULT_MODEL,
     CONF_TEMPERATURE,
     CONF_TOP_P,
+    CONF_REASONING,
     CONF_AZURE_VERSION,
     CONF_AZURE_BASE_URL,
     CONF_AZURE_DEPLOYMENT,
@@ -86,6 +87,7 @@ async def async_setup_entry(hass, entry):
         CONF_DEFAULT_MODEL: entry.data.get(CONF_DEFAULT_MODEL),
         CONF_TEMPERATURE: entry.data.get(CONF_TEMPERATURE),
         CONF_TOP_P: entry.data.get(CONF_TOP_P),
+        CONF_REASONING: entry.data.get(CONF_REASONING),
         # Ollama specific
         CONF_CONTEXT_WINDOW: entry.data.get(CONF_CONTEXT_WINDOW),
         CONF_KEEP_ALIVE: entry.data.get(CONF_KEEP_ALIVE),
@@ -560,7 +562,7 @@ class ServiceCallData:
         self.target_width = data_call.data.get(TARGET_WIDTH, 3840)
         self.temperature = float()
         self.max_tokens = int(data_call.data.get(MAXTOKENS, 3000))
-        self.reasoning = data_call.data.get("reasoning", "none")
+        self.reasoning = data_call.data.get(CONF_REASONING, "low")
         self.include_filename = data_call.data.get(INCLUDE_FILENAME, False)
         self.expose_images = data_call.data.get(EXPOSE_IMAGES, False)
         self.generate_title = data_call.data.get(GENERATE_TITLE, False)

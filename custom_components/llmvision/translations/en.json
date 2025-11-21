@@ -100,11 +100,13 @@
                         "description": "Set default model parameters",
                         "data": {
                             "default_model": "Default model",
+                            "reasoning": "Reasoning effort",
                             "temperature": "Temperature",
                             "top_p": "Top P"
                         },
                         "data_description": {
                             "default_model": "The default model to use when no other model is specified.",
+                            "reasoning": "Default reasoning effort for Responses models: none, low, medium, or high.",
                             "temperature": "Controls the randomness of the output. Lower values make the output more deterministic.",
                             "top_p": "Controls the diversity of the output. Lower values make the output more focused."
                         }
@@ -246,11 +248,13 @@
                         "description": "Set default model parameters",
                         "data": {
                             "default_model": "Default model",
+                            "reasoning": "Reasoning effort",
                             "temperature": "Temperature",
                             "top_p": "Top P"
                         },
                         "data_description": {
                             "default_model": "The default model to use when no other model is specified.",
+                            "reasoning": "Default reasoning effort for Responses models: none, low, medium, or high.",
                             "temperature": "Controls the randomness of the output. Lower values make the output more deterministic.",
                             "top_p": "Controls the diversity of the output. Lower values make the output more focused."
                         }
@@ -308,11 +312,13 @@
                         "description": "Set default model parameters",
                         "data": {
                             "default_model": "Default model",
+                            "reasoning": "Reasoning effort",
                             "temperature": "Temperature",
                             "top_p": "Top P"
                         },
                         "data_description": {
                             "default_model": "The default model to use when no other model is specified.",
+                            "reasoning": "Default reasoning effort for Responses models: none, low, medium, or high.",
                             "temperature": "Controls the randomness of the output. Lower values make the output more deterministic.",
                             "top_p": "Controls the diversity of the output. Lower values make the output more focused."
                         }
@@ -338,11 +344,13 @@
                         "description": "Set default model parameters",
                         "data": {
                             "default_model": "Default model",
+                            "reasoning": "Reasoning effort",
                             "temperature": "Temperature",
                             "top_p": "Top P"
                         },
                         "data_description": {
                             "default_model": "The default model to use when no other model is specified.",
+                            "reasoning": "Default reasoning effort for Responses models: none, low, medium, or high.",
                             "temperature": "Controls the randomness of the output. Lower values make the output more deterministic.",
                             "top_p": "Controls the diversity of the output. Lower values make the output more focused."
                         }

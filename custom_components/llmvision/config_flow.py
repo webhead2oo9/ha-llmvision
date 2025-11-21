@@ -57,6 +57,7 @@ from .const import (
     ENDPOINT_OPENROUTER,
     CONF_CONTEXT_WINDOW,
     CONF_KEEP_ALIVE,
+    CONF_REASONING,
     VERSION_AZURE,
 )
 
@@ -394,6 +395,19 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OPENWEBUI_MODEL
                             ): str,
+                            vol.Optional(CONF_REASONING, default="low"): selector(
+                                {
+                                    "select": {
+                                        "options": [
+                                            "none",
+                                            "low",
+                                            "medium",
+                                            "high",
+                                        ],
+                                        "mode": "dropdown",
+                                    }
+                                }
+                            ),
                             vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
@@ -436,6 +450,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_DEFAULT_MODEL: self.init_info.get(
                         CONF_DEFAULT_MODEL, DEFAULT_OPENWEBUI_MODEL
                     ),
+                    CONF_REASONING: self.init_info.get(CONF_REASONING, "low"),
                     CONF_TEMPERATURE: self.init_info.get(CONF_TEMPERATURE, 0.5),
                     CONF_TOP_P: self.init_info.get(CONF_TOP_P, 0.9),
                 },
@@ -505,6 +520,19 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OPENAI_MODEL
                             ): str,
+                            vol.Optional(CONF_REASONING, default="low"): selector(
+                                {
+                                    "select": {
+                                        "options": [
+                                            "none",
+                                            "low",
+                                            "medium",
+                                            "high",
+                                        ],
+                                        "mode": "dropdown",
+                                    }
+                                }
+                            ),
                             vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
@@ -542,6 +570,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_DEFAULT_MODEL: self.init_info.get(
                         CONF_DEFAULT_MODEL, DEFAULT_OPENAI_MODEL
                     ),
+                    CONF_REASONING: self.init_info.get(CONF_REASONING, "low"),
                     CONF_TEMPERATURE: self.init_info.get(CONF_TEMPERATURE, 0.5),
                     CONF_TOP_P: self.init_info.get(CONF_TOP_P, 0.9),
                 },
@@ -1030,6 +1059,19 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_CUSTOM_OPENAI_MODEL
                             ): str,
+                            vol.Optional(CONF_REASONING, default="low"): selector(
+                                {
+                                    "select": {
+                                        "options": [
+                                            "none",
+                                            "low",
+                                            "medium",
+                                            "high",
+                                        ],
+                                        "mode": "dropdown",
+                                    }
+                                }
+                            ),
                             vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
@@ -1073,6 +1115,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_DEFAULT_MODEL: self.init_info.get(
                         CONF_DEFAULT_MODEL, DEFAULT_CUSTOM_OPENAI_MODEL
                     ),
+                    CONF_REASONING: self.init_info.get(CONF_REASONING, "low"),
                     CONF_TEMPERATURE: self.init_info.get(CONF_TEMPERATURE, 0.5),
                     CONF_TOP_P: self.init_info.get(CONF_TOP_P, 0.9),
                 },
@@ -1429,6 +1472,19 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             vol.Required(
                                 CONF_DEFAULT_MODEL, default=DEFAULT_OPENROUTER_MODEL
                             ): str,
+                            vol.Optional(CONF_REASONING, default="low"): selector(
+                                {
+                                    "select": {
+                                        "options": [
+                                            "none",
+                                            "low",
+                                            "medium",
+                                            "high",
+                                        ],
+                                        "mode": "dropdown",
+                                    }
+                                }
+                            ),
                             vol.Optional(CONF_TEMPERATURE, default=1.0): selector(
                                 {
                                     "number": {
@@ -1468,6 +1524,7 @@ class llmvisionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_DEFAULT_MODEL: self.init_info.get(
                         CONF_DEFAULT_MODEL, DEFAULT_OPENROUTER_MODEL
                     ),
+                    CONF_REASONING: self.init_info.get(CONF_REASONING, "low"),
                     CONF_TEMPERATURE: self.init_info.get(CONF_TEMPERATURE, 0.5),
                     CONF_TOP_P: self.init_info.get(CONF_TOP_P, 0.9),
                 },
